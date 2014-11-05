@@ -57,7 +57,12 @@ Q3PtrList<Node>      SymbolNodes;
 Q3PtrList<Diagram>   SymbolDiags;
 Q3PtrList<Component> SymbolComps;
 
-
+/**
+ * @brief Schematic::Schematic creates a new Schematic instance derived from QucsDoc
+ *
+ * @param App_
+ * @param Name_
+ */
 Schematic::Schematic(QucsApp *App_, const QString& Name_)
     : QucsDoc(App_, Name_)
 {
@@ -320,8 +325,20 @@ void Schematic::setChanged(bool c, bool fillStack, char Op)
 }
 
 // -----------------------------------------------------------
+/**
+ * @brief Schematic::sizeOfFrame sets the size of the schematics frame.
+ * The resulting size is returned through the output parameters.
+ * Note that on each size 15mm are taken off for margins.
+ *
+ * @param xall output parameter for the overall horizontal size
+ * @param yall output parameter for the overall vertical size
+ * @return true on success, false otherwise
+ */
 bool Schematic::sizeOfFrame(int& xall, int& yall)
 {
+  // TODO: are xall and yall not supposed to be attributes of the schematics class?
+  // TODO: are these numbers mm, pixels or something else?
+
   // Values exclude border of 1.5cm at each side.
   switch(showFrame) {
     case 1:  xall = 1020; yall =  765; break;  // DIN A5 landscape

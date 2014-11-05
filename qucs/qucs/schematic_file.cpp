@@ -41,6 +41,8 @@
 
 // Here the subcircuits, SPICE components etc are collected. It must be
 // global to also work within the subcircuits.
+// TODO: This then needs to go into the lowest common namespace.
+// provided one has been created
 SubMap FileList;
 
 
@@ -49,6 +51,7 @@ SubMap FileList;
 // string. This is used to copy the selected elements into the clipboard.
 QString Schematic::createClipboardFile()
 {
+    // TODO: name these variables properly.
   int z=0;  // counts selected elements
   Wire *pw;
   Diagram *pd;
@@ -99,6 +102,7 @@ QString Schematic::createClipboardFile()
 
 // -------------------------------------------------------------
 // Only read fields without loading them.
+// TODO: how is that supposed to work?
 bool Schematic::loadIntoNothing(QTextStream *stream)
 {
   QString Line, cstr;
@@ -107,6 +111,9 @@ bool Schematic::loadIntoNothing(QTextStream *stream)
     if(Line.at(0) == '<') if(Line.at(1) == '/') return true;
   }
 
+  // TODO: isnt this error message misleading
+  // since the method is called as well on other fields
+  // and may fail there?
   QMessageBox::critical(0, QObject::tr("Error"),
 	QObject::tr("Format Error:\n'Painting' field is not closed!"));
   return false;
@@ -154,7 +161,7 @@ bool Schematic::pasteFromClipboard(QTextStream *stream, Q3PtrList<Element> *pe)
 
     return true;
   }
-
+// TODO: put an "else"-branch here for better code-self-documentation
   // read content in schematic edit mode *************************
   while(!stream->atEnd()) {
     Line = stream->readLine();
@@ -1109,6 +1116,7 @@ void Schematic::propagateNode(QStringList& Collect,
   Cons.clear();
 }
 
+// TODO: move include to the top
 #include <iostream>
 // ---------------------------------------------------
 // Goes through all schematic components and allows special component
@@ -1787,7 +1795,7 @@ void Schematic::beginNetlistDigital(QTextStream& stream)
       stream << "  wire " << (*it).Name << ";\n";
     }
     stream << "\n";
-  } else {
+  } else {  // TODO: VHDL, I presume?
     stream << "architecture Arch_TestBench of TestBench is\n";
     Q3ValueList<DigSignal> values = Signals.values();
     Q3ValueList<DigSignal>::iterator it;

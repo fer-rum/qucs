@@ -21,9 +21,14 @@
 #include "element.h"
 #include "viewpainter.h"
 
-
+// TODO: what is a painting in this context supposed to be?
 class Painting : public Element  {
 public:
+
+    // TODO: check for extra ";"
+    // TODO: if these are intended to be pure virtual functions use
+    // virtual foo() = 0;
+
   Painting();
  ~Painting() {};
 

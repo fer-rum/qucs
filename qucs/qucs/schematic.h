@@ -41,7 +41,12 @@ class QMouseEvent;
 class QDragEnterEvent;
 class QPainter;
 
+// TODO: all this belongs in a proper namespace
+
+// --- structures ---
 // digital signal data
+// TODO: this should better be a class
+// TODO: Better give it a full name, like "DigitalSignal"
 struct DigSignal {
   DigSignal() { Name=""; Type=""; }
   DigSignal(const QString& _Name, const QString& _Type = "")
@@ -49,11 +54,10 @@ struct DigSignal {
   QString Name; // name
   QString Type; // type of signal
 };
-typedef QMap<QString, DigSignal> DigMap;
-typedef enum {_NotRop, _Rect, _Line, _Ellipse, _Arc, _DotLine, _Translate, _Scale}PE;
-typedef struct {PE pe; int x1; int y1;int x2;int y2;int a; int b; bool PaintOnViewport;}PostedPaintEvent;
 
 // subcircuit, vhdl, etc. file structure
+// TODO: this should better be a class
+// TODO: Better give it a full name
 struct SubFile {
   SubFile() { Type=""; File=""; PortTypes.clear(); }
   SubFile(const QString& _Type, const QString& _File)
@@ -62,10 +66,25 @@ struct SubFile {
   QString File;          // file name identifier
   QStringList PortTypes; // data types of in/out signals
 };
+
+// TODO: minimize usage of typedefs.
+// --- typedefs ---
+// TODO: type only used three times -> typedef unnecessary
+typedef QMap<QString, DigSignal> DigMap;
+// TODO: put this in a proper enum with a proper name
+typedef enum {_NotRop, _Rect, _Line, _Ellipse, _Arc, _DotLine, _Translate, _Scale}PE;
+typedef struct {PE pe; int x1; int y1;int x2;int y2;int a; int b; bool PaintOnViewport;}PostedPaintEvent;
 typedef QMap<QString, SubFile> SubMap;
 
+// TODO: does it have any special behaviour, requirements, dependencies...?
+/**
+ * @brief The Schematic class represents the schematic drawing of a circuit.
+ */
 class Schematic : public Q3ScrollView, public QucsDoc {
   Q_OBJECT
+
+    // TODO: Order class members
+
 public:
   Schematic(QucsApp*, const QString&);
  ~Schematic();
@@ -101,8 +120,8 @@ public:
   bool    paste(QTextStream*, Q3PtrList<Element>*);
   bool    load();
   int     save();
-  int     saveSymbolCpp (void);
-  int     saveSymbolJSON (void);
+  int     saveSymbolCpp (void); // TODO: candidate for factory
+  int     saveSymbolJSON (void); // TODO: candidate for factory
   void    becomeCurrent(bool);
   bool    undo();
   bool    redo();
@@ -112,7 +131,7 @@ public:
   bool scrollLeft(int);
   bool scrollRight(int);
 
-  // The pointers points to the current lists, either to the schematic
+  // The pointers point to the current lists, either to the schematic
   // elements "Doc..." or to the symbol elements "SymbolPaints".
   Q3PtrList<Wire>      *Wires, DocWires;
   Q3PtrList<Node>      *Nodes, DocNodes;
@@ -130,6 +149,21 @@ public:
   int ViewX1, ViewY1, ViewX2, ViewY2;  // size of the document area
   int UsedX1, UsedY1, UsedX2, UsedY2;  // document area used by elements
 
+  /**
+   * @brief showFrame
+   * It may hold values representing the size of the schematic which corresponds as follows:
+   * 1 - DIN A5 landscape
+   * 2 - DIN A5 portrait
+   * 3 - DIN A4 landscape
+   * 4 - DIN A4 portrait
+   * 5 - DIN A3 landscape
+   * 6 - DIN A3 portrait
+   * 7 - US Letter landscape
+   * 8 - US Letter portrait
+   */
+  // TODO: what is this attributes exact function?
+  // How does the name correspond to the meaning?
+  // TODO: should this not better be an enumeration then?
   int showFrame;
   QString Frame_Text0, Frame_Text1, Frame_Text2, Frame_Text3;
 
@@ -176,6 +210,8 @@ private:
    *****  pointers "Wires", "Nodes", "Diagrams", "Paintings" and  *****
    *****  "Components".                                           *****
    ******************************************************************** */
+    // TODO: this indicates that these attributes and methods
+    // could be moved out into a seperate class
 
 public:
   Node* insertNode(int, int, Element*);
@@ -248,8 +284,13 @@ private:
    *****  "schematic_file.cpp". They only access the QPtrLists    *****
    *****  and their pointers. ("DocComps", "Components" etc.)     *****
    ******************************************************************** */
+    // TODO: this indicates that these attributes and methods
+    // could be moved out into a seperate class
 
 public:
+
+  // TODO: the netlist methods shoud be split up
+  // depending on which netlist they generate.
   bool createLibNetlist(QTextStream*, QTextEdit*, int);
   bool createSubNetlist(QTextStream *, int&, QStringList&, QTextEdit*, int);
   void createSubNetlistPlain(QTextStream*, QTextEdit*, int);

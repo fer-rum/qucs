@@ -40,11 +40,14 @@
 #include <QPen>
 #include <QBrush>
 
+// TODO: put in appropriate namespace
+
 class Node;
 class QPainter;
 class WireLabel;
 class Schematic;
 
+// TODO: these should be proper classes
 struct Line {
   Line(int _x1, int _y1, int _x2, int _y2, QPen _style)
        : x1(_x1), y1(_y1), x2(_x2), y2(_y2), style(_style) {};
@@ -100,7 +103,7 @@ struct Property {
   QString Description;
 };
 
-
+// TODO: use an enumeration and an appropriate type hierarcy for this.
 // valid values for Element.Type
 // The 4 least significant bits of each value are reserved for special
 // additionals !!!
@@ -150,6 +153,7 @@ public:
   virtual void getCenter(int&, int&);
 
   bool isSelected;
+  // TODO: does the Type-attribute refer to the definition-list above?
   int  Type;    // whether it is Component, Wire, ...
   int  cx, cy, x1, y1, x2, y2;  // center and relative boundings
 };
