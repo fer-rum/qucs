@@ -26,6 +26,7 @@
 #include "diagrams/diagram.h"
 #include "paintings/painting.h"
 #include "components/component.h"
+#include "marconetlist.h"
 
 #include <Q3ScrollView>
 #include <Q3PtrList>
@@ -112,6 +113,7 @@ public:
   bool scrollLeft(int);
   bool scrollRight(int);
 
+  // TODO: Q3PtrList is deprecated
   // The pointers points to the current lists, either to the schematic
   // elements "Doc..." or to the symbol elements "SymbolPaints".
   Q3PtrList<Wire>      *Wires, DocWires;

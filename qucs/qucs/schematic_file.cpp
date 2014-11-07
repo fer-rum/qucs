@@ -37,6 +37,7 @@
 #include "components/verilogfile.h"
 #include "components/libcomp.h"
 #include "module.h"
+#include "marconetlist.h"
 
 
 // Here the subcircuits, SPICE components etc are collected. It must be
@@ -335,13 +336,28 @@ int Schematic::saveSymbolJSON()
 // Returns the number of subcircuit ports.
 int Schematic::saveDocument()
 {
+
+    // --- sneak in automated MarcoNetlist export
+
+    QFile marcoNetlistExport(DocName + ".mnl");
+    if(!marcoNetlistExport.open(QIODevice::WriteOnly)) {
+      QMessageBox::critical(0, QObject::tr("Error"),
+                  QObject::tr("Cannot save document!"));
+      return -1;
+    }
+
+    QTextStream exportStream(&marcoNetlistExport);
+    exportStream << qucs::exports::MarcoNetlistConverter::convertToMarcoNetlist(this);
+    marcoNetlistExport.close();
+
+    // --- end of snuck in export
+
   QFile file(DocName);
   if(!file.open(QIODevice::WriteOnly)) {
     QMessageBox::critical(0, QObject::tr("Error"),
 				QObject::tr("Cannot save document!"));
     return -1;
   }
-
   QTextStream stream(&file);
 
   stream << "<Qucs Schematic " << PACKAGE_VERSION << ">\n";
