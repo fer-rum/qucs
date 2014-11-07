@@ -596,6 +596,7 @@ void Component::mirrorY()
   if((ty > y1) && (ty < y2)) tx = -tx-dx;     // mirror text position
   else tx = x1+tx+x2;
 
+  // TODO: explain this.
   mirroredX = !mirroredX;   // keep track of what's done
   rotated += rotated << 1;
   rotated += 2;

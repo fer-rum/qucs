@@ -26,7 +26,11 @@
 class QPainter;
 class QString;
 
-
+/**
+ * @brief The Wire class is a representation of the drawing of a wire in a Schematic.
+ *
+ * \todo Is only horizontal and vertical supported? Clarify.
+ */
 class Wire : public Conductor {
 public:
   Wire(int _x1=0, int _y1=0, int _x2=0, int _y2=0, Node *n1=0, Node *n2=0);

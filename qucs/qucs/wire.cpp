@@ -146,8 +146,19 @@ void Wire::setName(const QString& Name_, const QString& Value_, int delta_, int 
 }
 
 // ----------------------------------------------------------------
-// Converts all necessary data of the wire into a string. This can be used to
-// save it to an ASCII file or to transport it via the clipboard.
+/**
+ * @brief Wire::save converts all necessary data of the wire into a string.
+ * This can be used to save it to an ASCII file or to transport it via the clipboard.
+ *
+ * The string follows the scheme
+ * &lt;x1 y1 x2 y2 "Label-&gt;name" Label-&gt;x1 Label-&gt;y1 Label-&gt;cx-x1Label-&gt;cy-y1 "Label-$gt;initValue"&gt;
+ *
+ * @return A QString representation of the given wire.
+ *
+ * \todo This function should have an appropriate name.
+ * \todo There is no space between Label->cx-x1 and Label->cy-y1
+ *
+ */
 QString Wire::save()
 {
   QString s  = "<"+QString::number(x1)+" "+QString::number(y1);
@@ -163,7 +174,17 @@ QString Wire::save()
 }
 
 // ----------------------------------------------------------------
-// This is the counterpart to Wire::save.
+/**
+ * @brief Wire::load recreates a wire from a string representation.
+ * This is the counterpart to Wire::save.
+ *
+ * @param _s A QString representation of the wire
+ * @return <i>false</i> on error, <i>true</i> otherwise
+ *
+ * \todo this function should have an apropriate name.
+ * \todo Wouldn't it be better to have a constructor that takes a QString than this?
+ * \todo Use proper exception handling.
+ */
 bool Wire::load(const QString& _s)
 {
   bool ok;

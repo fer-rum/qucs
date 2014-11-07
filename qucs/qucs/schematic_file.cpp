@@ -660,12 +660,20 @@ bool Schematic::loadComponents(QTextStream *stream, Q3PtrList<Component> *List)
 }
 
 // -------------------------------------------------------------
-// Inserts a wire without performing logic for optimizing.
+//
+/**
+ * @brief Schematic::simpleInsertWire inserts a wire without performing logic for optimizing.
+ * @param pw
+ *
+ * \todo Give all parameters and variables usable names.
+ */
 void Schematic::simpleInsertWire(Wire *pw)
 {
   Node *pn;
   // check if first wire node lies upon existing node
   for(pn = DocNodes.first(); pn != 0; pn = DocNodes.next())
+
+    // TODO for all that is holy, make this into a proper boolean condition
     if(pn->cx == pw->x1) if(pn->cy == pw->y1) break;
 
   if(!pn) {   // create new node, if no existing one lies at this position
@@ -687,6 +695,7 @@ void Schematic::simpleInsertWire(Wire *pw)
 
   // check if second wire node lies upon existing node
   for(pn = DocNodes.first(); pn != 0; pn = DocNodes.next())
+    // TODO for all that is holy, make this into a proper boolean condition
     if(pn->cx == pw->x2) if(pn->cy == pw->y2) break;
 
   if(!pn) {   // create new node, if no existing one lies at this position

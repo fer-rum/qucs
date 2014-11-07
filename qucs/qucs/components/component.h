@@ -57,11 +57,24 @@ public:
   bool    load(const QString&);
 
   // to hold track of the component appearance for saving and copying
-  bool mirroredX;   // is it mirrored about X axis or not
-  int  rotated;     // rotation angle divided by 90 degrees
+  /**
+   * @brief mirroredX tells if the Component it mirrored on the X axis or not
+   */
+  bool mirroredX;
+
+  /**
+   * @brief rotated is the rotation angle divided by 90 degrees.
+   *
+   * \todo clarify direction of rotation and initial position
+   */
+  int  rotated;
 
   virtual QString getSubcircuitFile() { return ""; }
-  // set the pointer scematic associated with the component
+
+  /**
+   * @brief setSchematic sets the pointer to the Schematic associated with the component.
+   * @param p
+   */
   virtual void setSchematic (Schematic* p) { containingSchematic = p; }
 
   QList<Line *>     Lines;
@@ -70,8 +83,16 @@ public:
   QList<Area *>     Ellips;
   QList<Port *>     Ports;
   QList<Text *>     Texts;
+
+  /**
+   * @brief Props represents the properties of a Schematic.
+   *
+   * \todo Clarify: which properties can these be?
+   * \bug Q3PtrList is deprecated
+   */
   Q3PtrList<Property> Props;
 
+  // TODO use an enumeration
   #define COMP_IS_OPEN    0
   #define COMP_IS_ACTIVE  1
   #define COMP_IS_SHORTEN 2
@@ -86,6 +107,12 @@ protected:
   virtual QString vhdlCode(int);
   virtual QString verilogCode(int);
 
+  /**
+   * @brief analyseLine
+   * @return
+   *
+   * \todo Typo: analyze...
+   */
   int  analyseLine(const QString&, int);
   bool getIntegers(const QString&, int *i1=0, int *i2=0, int *i3=0,
                    int *i4=0, int *i5=0, int *i6=0);
@@ -97,7 +124,11 @@ protected:
   Schematic* containingSchematic;
 };
 
-
+/**
+ * @brief The MultiViewComponent class
+ *
+ * \todo Clarify: what does this class mean?
+ */
 class MultiViewComponent : public Component {
 public:
   MultiViewComponent() {};
