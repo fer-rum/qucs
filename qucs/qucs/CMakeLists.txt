@@ -110,6 +110,7 @@ SET(QUCS_SRCS
   wirelabel.cpp node.cpp qucs_init.cpp
   syntax.cpp
   messagedock.cpp
+  marconetlist.cpp
 )
 
 #
