@@ -1,14 +1,15 @@
 #include "marconetlist.h"
+#include "schematic.h"
 
 namespace qucs {
 namespace exports {
 
 // --- MarcoNetlistConverter ---
-static QString
+QString
 MarcoNetlistConverter::convertToMarcoNetlist(Schematic* schematic) {
 
     QString result = QString(   "# MarcoNetlist v0.1\n"
-                             +  "# " + schematic.Frame_Text0 + "\n\n");
+                                "# " + schematic->Frame_Text0 + "\n\n");
 
     // write down all components
     Component* component = schematic->Components->first();
