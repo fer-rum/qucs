@@ -84,6 +84,7 @@ public:
   /**
    * @brief convertToMarcoNetlist is a representation of this Component in the MarcoNetlist format if there is any.
    * Otherwise it returns an empty QString which is the default behaviour.
+   * It also sets the appropriate node names...
    *
    * @author Fredo Erxleben
    * @return A string representing the component as a MarcoNetlist.

@@ -15,6 +15,13 @@
  *                                                                         *
  ***************************************************************************/
 #include <QtGui>
+
+#include <Q3PtrList>
+
+// TODO remove if no longer needed
+#include <iostream>
+#include <typeinfo>
+
 #include "wire.h"
 
 
@@ -205,4 +212,70 @@ bool Wire::load(const QString& _s)
   }
 
   return true;
+}
+
+/**
+ * @brief Wire::inspectPort is a helper for convertToMarcoNetlist.
+ * Writes out ONE port.
+ * @param port
+ * @return
+ */
+QString
+Wire::inspectPort(Node* port){
+
+    QString result = QString();
+
+    Node* wireNode = port;
+    Q3PtrList<Element> wireConnections = wireNode->Connections;
+    Element* wireStart = wireConnections.first();
+
+    std::cerr << "Node: " << wireConnections.count() << " elements" << std::endl;
+    while(wireStart != 0){
+
+        if(!result.isEmpty()){
+            result += "_";
+        }
+
+        std::cerr << typeid(*wireStart).name() << std::endl;
+
+        // handle components
+        Component* component = dynamic_cast<Component*>(wireStart);
+        if(component != 0){
+
+            // Wite node name should contain component name
+            // leave component name alone!
+            result += wireNode->Name;
+
+        } else {
+
+            Wire* wire = dynamic_cast<Wire*>(wireStart);
+            if(wire != 0){ // handle Wire
+                result += wire->Label->Name + wireNode->Name;
+            }
+        }
+
+        wireStart = wireConnections.next();
+    }
+    std::cerr << result.toStdString() << std::endl;
+    return result;
+}
+// TODO: make sure wire nodes are named
+// at least the ones of components
+
+
+
+QString
+Wire::convertToMarcoNetlist(){
+
+    QString result= QString("CONNECT(");
+
+    std::cerr << "Checking wire..." << std::endl;
+    // source ports
+    result = result + this->inspectPort(this->Port1);
+    // skip selection variable list
+    result = result + "::";
+    result = result + this->inspectPort(this->Port2);
+
+    result = result + ")";
+    return result;
 }

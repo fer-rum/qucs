@@ -22,6 +22,7 @@
 #include "element.h"
 #include "components/component.h"    // because of struct Port
 #include "wirelabel.h"
+#include "node.h"
 
 class QPainter;
 class QString;
@@ -45,6 +46,16 @@ public:
   QString save();
   bool    load(const QString&);
   bool    isHorizontal();
+
+  /**
+   * @brief convertToMarcoNetlist is a representation of this Wire in the MarcoNetlist format.
+   *
+   * @author Fredo Erxleben
+   * @return A string representing the connection as a MarcoNetlist.
+   */
+  QString convertToMarcoNetlist();
+private:
+  QString inspectPort(Node* port);
 };
 
 #endif
