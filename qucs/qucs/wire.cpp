@@ -223,20 +223,27 @@ bool Wire::load(const QString& _s)
 QString
 Wire::inspectPort(Node* port){
 
+    if(!port->Name.isEmpty()){
+        return port->Name;
+    }
+
     QString result = QString();
 
     Node* wireNode = port;
+
     Q3PtrList<Element> wireConnections = wireNode->Connections;
     Element* wireStart = wireConnections.first();
 
-    std::cerr << "Node: " << wireConnections.count() << " elements" << std::endl;
     while(wireStart != 0){
+
+        if(wireStart == this){
+            wireStart = wireConnections.next();
+            continue;
+        }
 
         if(!result.isEmpty()){
             result += "_";
         }
-
-        std::cerr << typeid(*wireStart).name() << std::endl;
 
         // handle components
         Component* component = dynamic_cast<Component*>(wireStart);
@@ -249,18 +256,17 @@ Wire::inspectPort(Node* port){
         } else {
 
             Wire* wire = dynamic_cast<Wire*>(wireStart);
-            if(wire != 0){ // handle Wire
-                result += wire->Label->Name + wireNode->Name;
+            if(wire != 0 && wire->Label != 0){ // handle Wire
+
+                std::cerr << "Label name: " << wire->Label->Name.toStdString() << endl;
+                result += wire->Label->Name;
             }
         }
 
         wireStart = wireConnections.next();
     }
-    std::cerr << result.toStdString() << std::endl;
     return result;
 }
-// TODO: make sure wire nodes are named
-// at least the ones of components
 
 
 
@@ -271,10 +277,10 @@ Wire::convertToMarcoNetlist(){
 
     std::cerr << "Checking wire..." << std::endl;
     // source ports
-    result = result + this->inspectPort(this->Port1);
+    result = result + this->Port1->Name;
     // skip selection variable list
-    result = result + "::";
-    result = result + this->inspectPort(this->Port2);
+    result = result + " :: ";
+    result = result + this->Port2->Name;
 
     result = result + ")";
     return result;

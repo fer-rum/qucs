@@ -8,19 +8,23 @@ namespace qucs {
 namespace exports {
 
 // --- MarcoNetlistConverter ---
+
 QString
 MarcoNetlistConverter::convertToMarcoNetlist(Schematic* schematic) {
+
+    int currentIndex = 0;
 
     QString result = QString(   "# MarcoNetlist v0.1\n"
                                 "# " + schematic->Frame_Text0 + "\n\n");
 
     result = result + "\n# Components:\n";
+
     // write down all components
     Component* component = schematic->Components->first();
     // TODO: enable C++11 usage of nullptr
     while(component != 0){
 
-        int currentIndex = 0;
+        currentIndex = 0;
 
         QListIterator<Port*> portIterator(component->Ports);
         while(portIterator.hasNext()){
@@ -38,29 +42,25 @@ MarcoNetlistConverter::convertToMarcoNetlist(Schematic* schematic) {
         component = schematic->Components->next();
     }
 
-    result = result + "\n# Connections:\n";
-
-    std::cerr << "Writing wires " << schematic->Wires->count() << std::endl;
-
-    // write down all wires
-    Wire* wire = schematic->Wires->first();
-    // TODO: enable C++11 usage of nullptr
-
-    int runningIndex = 0;
-    while(wire != 0){
-        // name the wire if not already done so...
-        if((wire->Label == 0) || wire->Label->Name.isEmpty()){
-            QString newName = QString("wire") + QString::number(runningIndex);
-            wire->setName(newName,"0");
-            runningIndex++;
-            std::cerr << "New index: " << runningIndex << std::endl;
+    // generically name all nodes
+    currentIndex = 0;
+    for(Node* node = schematic->Nodes->first(); node != 0; node = schematic->Nodes->next()){
+        if(node->Name != 0 && (!node->Name.isEmpty())){
+            continue;
         }
-
-        result = result + wire->convertToMarcoNetlist() + "\n";
-
-        // next iteration
-        wire = schematic->Wires->next();
+        node->Name = QString("node_");
+        node->Name += QString::number(currentIndex);
+        currentIndex ++;
     }
+
+    result = result + "\n# Connections:\n";
+    // write down all wires
+
+    // AFTER naming everything, iterate again to build netlist
+    for(Wire* wire = schematic->Wires->first(); wire != 0; wire = schematic->Wires->next()){
+        result = result + wire->convertToMarcoNetlist() + "\n";
+    }
+
     return result;
 }
 
