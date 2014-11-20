@@ -24,6 +24,8 @@ class mux2to1 : public Component
     void createSymbol();
     QString vhdlCode(int);
     QString verilogCode(int);
+
+    QString convertToMarcoNetlist();
 };
 
 #endif /* mux2to1_H */

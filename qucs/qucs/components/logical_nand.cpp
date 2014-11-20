@@ -16,6 +16,7 @@
  ***************************************************************************/
 
 #include "logical_nand.h"
+#include "node.h"
 
 Logical_NAND::Logical_NAND()
 {
@@ -47,4 +48,43 @@ Element* Logical_NAND::info(QString& Name, char* &BitmapFile, bool getNewOne)
 
   if(getNewOne)  return new Logical_NAND();
   return 0;
+}
+
+QString
+Logical_NAND::convertToMarcoNetlist(){
+
+    QString result = QString("NAND(");
+    QListIterator<Port*> portIterator(this->Ports);
+
+    // there is only one output port and it is the first port
+    Port* currentPort = portIterator.next();
+    currentPort->Connection->Name = this->Name + "_out0";
+    result += currentPort->Connection->Name;
+
+    result +=" :: "; // no selection list
+
+    // the rest are input ports
+    int currentIndex = this->Ports.count() -2;
+    // -1 for fencepost error,
+    // -1 because output is already accounted for
+
+    QString inputVariablesList = QString();
+    while(portIterator.hasNext()){
+
+        // intermediate comma, if needed
+        if(!inputVariablesList.isEmpty()){
+            inputVariablesList += ", ";
+        }
+
+        // name the ports
+        currentPort = portIterator.next();
+        currentPort->Connection->Name =
+                this->Name + "_in" + QString::number(currentIndex);
+
+        // and add them to the variables
+        inputVariablesList += currentPort->Connection->Name;
+        currentIndex--;
+    }
+    result += inputVariablesList + ")";
+    return result;
 }

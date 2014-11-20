@@ -27,6 +27,8 @@ public:
  ~Logical_NAND();
   Component* newOne();
   static Element* info(QString&, char* &, bool getNewOne=false);
+
+    QString convertToMarcoNetlist();
 };
 
 #endif

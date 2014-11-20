@@ -27,6 +27,8 @@ public:
  ~Logical_OR();
   Component* newOne();
   static Element* info(QString&, char* &, bool getNewOne=false);
+
+    QString convertToMarcoNetlist();
 };
 
 #endif

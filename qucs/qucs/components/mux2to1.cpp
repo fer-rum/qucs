@@ -148,3 +148,35 @@ QString mux2to1::verilogCode( int )
   return l;
 }
 
+QString
+mux2to1::convertToMarcoNetlist(){
+
+    QString result = QString("MUX(");
+    QListIterator<Port*> portIterator(this->Ports);
+    QString inputVariablesList = QString();
+
+    // first port is enable port and therefore ignored
+    Port* currentPort = portIterator.next();
+    //second port is selection port
+    currentPort = portIterator.next();
+    currentPort->Connection->Name = this->Name + "_sel0";
+    QString selectionVariablesList = currentPort->Connection->Name;
+
+    // input variables
+    currentPort = portIterator.next();
+    currentPort->Connection->Name = this->Name + "_in1";
+    inputVariablesList += currentPort->Connection->Name;
+
+    inputVariablesList += ", ";
+
+    currentPort = portIterator.next();
+    currentPort->Connection->Name = this->Name + "_in0";
+    inputVariablesList += currentPort->Connection->Name;
+
+    currentPort = portIterator.next();
+    currentPort->Connection->Name = this->Name + "_out0";
+    result += currentPort->Connection->Name;
+
+    result += " : " + selectionVariablesList + " : " + inputVariablesList + ")";
+    return result;
+}

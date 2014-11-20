@@ -32,6 +32,8 @@ protected:
   QString vhdlCode(int);
   QString verilogCode(int);
   void createSymbol();
+
+    QString convertToMarcoNetlist();
 };
 
 #endif

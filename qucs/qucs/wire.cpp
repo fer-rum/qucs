@@ -275,13 +275,10 @@ Wire::convertToMarcoNetlist(){
 
     QString result= QString("CONNECT(");
 
-    std::cerr << "Checking wire..." << std::endl;
-    // source ports
-    result = result + this->Port1->Name;
-    // skip selection variable list
-    result = result + " :: ";
-    result = result + this->Port2->Name;
+    result += this->Port1->Name;
+    result += " :: "; // skip selection variable list
+    result += this->Port2->Name;
+    result += ")";
 
-    result = result + ")";
     return result;
 }
