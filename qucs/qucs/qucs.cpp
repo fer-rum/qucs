@@ -54,6 +54,7 @@
 #include "dialogs/exportdialog.h"
 #include "octave_window.h"
 #include "../qucs-lib/qucslib_common.h"
+#include "marconetlist.h"
 
 extern const char *empty_xpm[];
 
@@ -2687,6 +2688,7 @@ void QucsApp::switchSchematicDoc (bool SchematicMode)
   setMarker->setEnabled (SchematicMode);
 
   exportAsImage->setEnabled (SchematicMode); // only export schematic, no text
+  exportMNetlist->setEnabled(SchematicMode);
 
   editFind->setEnabled (!SchematicMode);
   editFindAgain->setEnabled (!SchematicMode);
@@ -3218,6 +3220,23 @@ void QucsApp::slotSaveSchematicToGraphicsFile(bool diagram)
 
     }
 
+}
+
+void QucsApp::slotExportMNetlist(){
+
+    Schematic* currentSchematic = (Schematic*) DocumentTab->currentPage();
+
+    QFile marcoNetlistExport(currentSchematic->DocName + ".mnl");
+    if(!marcoNetlistExport.open(QIODevice::WriteOnly)) {
+      QMessageBox::critical(0, QObject::tr("Error"),
+                  QObject::tr("Cannot save MNetlist!"));
+    }
+
+    QTextStream exportStream(&marcoNetlistExport);
+    exportStream << qucs::exports::MarcoNetlistConverter::convertToMarcoNetlist(currentSchematic);
+    marcoNetlistExport.close();
+
+    QMessageBox::information(0, QObject::tr("Success"), QObject::tr("M-Netlist saved."));
 }
 
 

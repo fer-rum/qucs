@@ -260,6 +260,9 @@ void QucsApp::initActions()
   exportAsImage = new QAction(tr("Export as image"),this);
   connect(exportAsImage,SIGNAL(activated()),SLOT(slotSaveSchematicToGraphicsFile()));
 
+  exportMNetlist = new QAction(tr("Export M-Netlist"), this);
+  connect(exportMNetlist, SIGNAL(activated()), SLOT(slotExportMNetlist()));
+
   // cursor left/right/up/down to move marker on a graph
   cursorLeft = new QShortcut(QKeySequence(Qt::Key_Left), this);
   connect(cursorLeft, SIGNAL(activated()), SLOT(slotCursorLeft()));
@@ -678,6 +681,7 @@ void QucsApp::initMenuBar()
   fileMenu->addAction(fileSaveAll);
   fileMenu->addAction(fileSaveAs);
   fileMenu->addAction(exportAsImage);
+  fileMenu->addAction(exportMNetlist);
   fileMenu->addAction(filePrint);
   fileMenu->addAction(filePrintFit);
   fileMenu->insertSeparator();

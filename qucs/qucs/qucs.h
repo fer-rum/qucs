@@ -169,6 +169,8 @@ public:
 
   QAction *exportAsImage;
 
+  QAction *exportMNetlist;
+
   QAction *activeAction;    // pointer to the action selected by the user
 
 private:
@@ -340,6 +342,7 @@ public slots:
   void slotOpenRecent(int num);
   void slotSaveDiagramToGraphicsFile();
   void slotSaveSchematicToGraphicsFile(bool diagram = false);
+  void slotExportMNetlist();
 
 private slots:
   void slotCursorLeft();
